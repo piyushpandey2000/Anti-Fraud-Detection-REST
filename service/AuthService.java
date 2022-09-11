@@ -34,7 +34,7 @@ public class AuthService {
         logger.info("Processing values before saving..");
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         if(userRepository.count()==0) {
-            user.setRole(ERole.ROLE_ADMINISTRATOR);
+            user.setRole(ERole.ADMINISTRATOR);
             user.setAccountNonLocked(true);
         }
 
@@ -66,11 +66,11 @@ public class AuthService {
     public ResponseEntity<?> editRole(EditRoleReq request) {
         Optional<User> user = userRepository.findUserByUsernameIgnoreCase(request.getUsername());
 
-        if(!user.isPresent()) {
+        if(user.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        if(request.getRole()==ERole.ROLE_ADMINISTRATOR) {
+        if(request.getRole()==ERole.ADMINISTRATOR) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
@@ -85,16 +85,16 @@ public class AuthService {
     public ResponseEntity<?> setAccess(SetAccessReq request) {
         Optional<User> userOptional = userRepository.findUserByUsernameIgnoreCase(request.getUsername());
 
-        if(!userOptional.isPresent()) {
+        if(userOptional.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         User user = userOptional.get();
-        if(user.getRole() == ERole.ROLE_ADMINISTRATOR && request.getOperation()== SetAccessReq.Operation.LOCK) {
+        if(user.getRole() == ERole.ADMINISTRATOR && request.getOperation()== SetAccessReq.Operation.LOCK) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        user.setAccountNonLocked(true);
-        return new ResponseEntity<>(Map.of("status", String.format("User %s %s!", user.getUsername(), user.isAccountNonLocked()?"locked":"unlocked")), HttpStatus.OK);
+        user.setAccountNonLocked(request.getOperation()== SetAccessReq.Operation.UNLOCK);
+        return new ResponseEntity<>(Map.of("status", String.format("User %s %s!", user.getUsername(), user.isAccountNonLocked()?"unlocked":"locked")), HttpStatus.OK);
     }
 }

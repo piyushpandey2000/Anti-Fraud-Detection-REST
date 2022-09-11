@@ -45,7 +45,7 @@ public class AuthController {
         return authService.editRole(request);
     }
 
-    @PostMapping("/access")
+    @PutMapping("/access")
     public ResponseEntity<?> setAccess(@RequestBody @Valid SetAccessReq request) {
         logger.info("Processing access request for username: {} to status: {}", request.getUsername(), request.getOperation());
         return authService.setAccess(request);

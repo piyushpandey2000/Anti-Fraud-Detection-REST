@@ -1,13 +1,11 @@
 package antifraud.models;
 
-import antifraud.security.service.Encoder;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -35,8 +33,13 @@ public class User {
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @Enumerated(EnumType.STRING)
-    private ERole role = ERole.ROLE_MERCHANT;
+    private ERole role = ERole.MERCHANT;
 
     @JsonIgnore
     private boolean isAccountNonLocked = false;
+
+    @JsonIgnore
+    public String getAuthority() {
+        return "ROLE_" + role.toString();
+    }
 }

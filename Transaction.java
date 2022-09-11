@@ -23,9 +23,9 @@ public class Transaction {
     public void calculateResult() {
         if(amount <= 200) {
             result = TransactionResult.ALLOWED;
-        } else if(amount > 200 && amount <= 1500) {
+        } else if(amount <= 1500) {
             result = TransactionResult.MANUAL_PROCESSING;
-        } else if(amount > 1500) {
+        } else {
             result = TransactionResult.PROHIBITED;
         }
     }

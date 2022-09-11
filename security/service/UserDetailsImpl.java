@@ -19,7 +19,7 @@ public class UserDetailsImpl implements UserDetails {
     public UserDetailsImpl(User user) {
         username = user.getUsername();
         password = user.getPassword();
-        rolesAndAuthorities = List.of(new SimpleGrantedAuthority(user.getRole().toString()));
+        rolesAndAuthorities = List.of(new SimpleGrantedAuthority(user.getAuthority()));
         isAccountNonLocked = user.isAccountNonLocked();
     }
 

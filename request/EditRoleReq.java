@@ -17,7 +17,6 @@ public class EditRoleReq {
     @NotBlank
     private String username;
 
-    @NotBlank
     @Enumerated(EnumType.STRING)
     private ERole role;
 }

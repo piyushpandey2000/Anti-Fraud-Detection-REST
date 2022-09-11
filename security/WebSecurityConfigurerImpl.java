@@ -1,9 +1,7 @@
 package antifraud.security;
 
-import antifraud.security.service.Encoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -26,7 +24,7 @@ public class WebSecurityConfigurerImpl extends WebSecurityConfigurerAdapter {
     UserDetailsService userDetailsService;
 
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    protected void configure(AuthenticationManagerBuilder auth) {
         auth.authenticationProvider(authenticationProvider());
     }
 
@@ -36,10 +34,9 @@ public class WebSecurityConfigurerImpl extends WebSecurityConfigurerAdapter {
                 .and()
                 .csrf().disable().headers().frameOptions().disable().and()
                 .authorizeRequests()
-                .mvcMatchers(HttpMethod.GET, "/api/auth.list").authenticated()
-                .mvcMatchers(HttpMethod.DELETE, "/api/auth/user/*").authenticated()
-                .mvcMatchers(HttpMethod.POST, "/api/antifraud/transaction").authenticated()
-                .mvcMatchers(HttpMethod.POST, "/api/auth/user").permitAll()
+                .mvcMatchers("/api/auth/user/*", "/api/auth/access", "/api/auth/role").hasAuthority("ROLE_ADMINISTRATOR")
+                .mvcMatchers("/api/auth/list").hasAnyAuthority("ROLE_ADMINISTRATOR", "ROLE_SUPPORT")
+                .mvcMatchers("/api/antifraud/transaction").hasAuthority("ROLE_MERCHANT")
                 .anyRequest().permitAll()
                 .and()
                 .sessionManagement()

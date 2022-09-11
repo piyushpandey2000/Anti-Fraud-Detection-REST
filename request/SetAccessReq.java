@@ -20,7 +20,6 @@ public class SetAccessReq {
     @NotBlank
     private String username;
 
-    @NotBlank
     @Enumerated(EnumType.STRING)
     private Operation operation;
 }
