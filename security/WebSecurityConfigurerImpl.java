@@ -37,6 +37,8 @@ public class WebSecurityConfigurerImpl extends WebSecurityConfigurerAdapter {
                 .mvcMatchers("/api/auth/user/*", "/api/auth/access", "/api/auth/role").hasAuthority("ROLE_ADMINISTRATOR")
                 .mvcMatchers("/api/auth/list").hasAnyAuthority("ROLE_ADMINISTRATOR", "ROLE_SUPPORT")
                 .mvcMatchers("/api/antifraud/transaction").hasAuthority("ROLE_MERCHANT")
+                .mvcMatchers("/api/antifraud/suspicious-ip", "/api/antifraud/stolencard").hasAuthority("ROLE_SUPPORT")
+                .mvcMatchers("/api/antifraud/suspicious-ip/*", "/api/antifraud/stolencard/*").hasAuthority("ROLE_SUPPORT")
                 .anyRequest().permitAll()
                 .and()
                 .sessionManagement()
